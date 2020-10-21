@@ -1,85 +1,64 @@
-# This program should be able to create three lists to store the scores of 5 different students, and should be able to print the values.
-########################
-#input name
-# store name as part of list
-# put in valule for subjects
-# go back
-# diplay available names
-# display scores for selected names
-########################
-    # while True:
-    #     if varname in Names:
-    #         print()
-    #         print('"'+ varname + '"s record already exists. Do you want to replace it?.')
-    #         print('Press "y" to replace, and press any other key to not: ',end='')
-    #         elp = input()
-    #         if elp == 'y':
-    #             del Inputs[int(Names.index(varname))]
-    #             Names.remove(varname)
-    #     Names += [varname]
-    #     for su in subjects :
-    #         print('Enter in your score for ' + su + ': ',end ='')
-    #         subjvar += [input()]
-    #     Inputs += [subjvar]
-    #     break
-
-
-
-
-
 import sys
 
-Names = []
-Inputs = []
-subjects = ['Maths','Chemistry','Physics','English','Futher Maths','Computer Science', 'Anime','Feat Scaling']
+Database = {'Default':[21,22,23,24,25,26,27]}
+subjects = ('Maths','Chemistry','Physics','English','Futher Maths','Computer Science', 'Anime')
 
 def first():
-    global Names
-    global Inputs
     subjvar = []
     print()
-
-    varname = input('Please input a your name (Press enter to exit): ')
+    while True:
+        varname = input('Please input a your name (Press enter to exit): ')
+        if varname.isalpha():
+            break
+        print('Type in a valid alphabetic character!')
     #adds the value of the name and subjects scores to the general name and subject list#
     while varname != '':
-        if varname not in Names:
-            Names += [varname]
+        if varname not in Database:
             for su in subjects :
-                print('Enter in your score for ' + su + ': ',end ='')
-                subjvar += [input()]
-            Inputs += [subjvar]
+                while True:
+                    print('Enter in your score for ' + su + ': ',end ='')
+                    inputs = input()
+                    if not inputs.isdecimal():
+                        print('Type in a valid number')
+                        continue
+                    elif inputs.isspace():
+                        print('Type in a number')
+                        continue
+                    subjvar += [inputs]
+                    break
+            Database[varname] = subjvar
             break
     #replaces an already inputed value if the users chooses#
         else:
             print()
-            print('"'+ varname + 's" record already exists. Do you want to replace it?.')
-            print('Press "y" to replace, and press any other key to exit: ',end='')
-            elp = input()
+            print('"'+ varname + '\'s" record already exists. Do you want to replace it?.')
+            elp = input('Press "y" to replace, and press any other key to exit: ')
             if elp == 'y':
-                del Inputs[int(Names.index(varname))]
-                Names.remove(varname)
+                del Database[varname]
                 continue
             else:
                 break
     if varname == '':
-      print('Youve exited')
+      print('You\'ve exited')
 
 def Printer():
     while True:
         print('Enter in the students name (Press enter to exit): ',end='')
         naem = input()
-        if naem in Names:
-            ind = int(Names.index(naem))
-            print(naem + 's scores are: ')
-            f = 0
+        if naem in Database:
+            strin = naem + '\'s scores'
+            print(''.upper().center(40,'='))
+            print(strin.upper().center(40))
+            print(''.upper().center(40,'='))
+            i = 0
             for sp in subjects :
-                print(sp+ ' :' + Inputs[ind][f] )
-                f+=1
+                print(sp.ljust(30) + '||' + str(Database[naem][i]).rjust(8) )
+                i+=1
         elif naem =='':
-            print('Youve exited')
+            print('You\'ve exited')
             break
         else:
-            print(naem + ' Isnt in our records.')
+            print(naem + ' Isn\'t in our records.')
     print()
 
 
@@ -89,11 +68,11 @@ while True:
         first()
     elif begin == 'r':
         print()
-        if Names == []:
+        if Database == {}:
             print('Our records are empty!!')
         else:
             print('Available records are: ',end='')
-            print(Names)
+            print(list(Database.keys()))
             Printer()
     elif begin == '':
         break
